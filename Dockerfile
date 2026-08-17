@@ -1,12 +1,17 @@
-FROM python:3.14.3
+FROM python:3.14-slim
 
-#working directory
+# Set working directory
 WORKDIR /app
 
-COPY . . 
+# Install dependencies
+COPY requirements.txt requirement.txt ./
+RUN pip install --no-cache-dir -r requirements.txt
 
-#install dependencies
-RUN pip install -r requirement.txt
+# Copy application files
+COPY . .
+
+# Expose port
 EXPOSE 5000
 
+ENV PORT=5000
 CMD [ "python", "app.py" ]

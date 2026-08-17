@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LoanPulse AI | Loan Approval Intelligence Platform</title>
+    <meta name="description" content="AI-Powered Loan Approval & Risk Assessment Pipeline built with Flask and Scikit-Learn.">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="app-background">
+        <div class="glow-orb orb-1"></div>
+        <div class="glow-orb orb-2"></div>
+        <div class="glow-orb orb-3"></div>
+    </div>
+
+    <header class="app-header">
+        <div class="header-container">
+            <div class="brand">
+                <div class="brand-icon">
+                    <i class="fa-solid fa-shield-halved"></i>
+                </div>
+                <div class="brand-text">
+                    <h1>LoanPulse <span class="badge-ai">AI</span></h1>
+                    <p>Machine Learning Loan Approval & Underwriting Engine</p>
+                </div>
+            </div>
+            <div class="header-actions">
+                <div class="status-indicator">
+                    <span class="pulse-dot"></span>
+                    <span class="status-text" id="api-status">API Online</span>
+                </div>
+                <a href="#api-docs" class="btn-secondary btn-sm"><i class="fa-solid fa-code"></i> API Specs</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-container">
+        <!-- Preset Controls Bar -->
+        <section class="presets-section">
+            <span class="presets-label"><i class="fa-solid fa-bolt"></i> Quick Scenarios:</span>
+            <div class="preset-buttons">
+                <button type="button" class="btn-chip active" id="btn-preset-approved" onclick="applyPreset('approved')">
+                    <i class="fa-solid fa-circle-check text-success"></i> Prime Borrower (Approved)
+                </button>
+                <button type="button" class="btn-chip" id="btn-preset-borderline" onclick="applyPreset('borderline')">
+                    <i class="fa-solid fa-triangle-exclamation text-warning"></i> Moderate Risk (Borderline)
+                </button>
+                <button type="button" class="btn-chip" id="btn-preset-rejected" onclick="applyPreset('rejected')">
+                    <i class="fa-solid fa-circle-xmark text-danger"></i> High Risk (Rejected)
+                </button>
+                <button type="button" class="btn-chip btn-chip-ghost" onclick="resetForm()">
+                    <i class="fa-solid fa-rotate-left"></i> Reset
+                </button>
+            </div>
+        </section>
+
+        <div class="dashboard-grid">
+            <!-- Left Side: Loan Application Form -->
+            <div class="card form-card">
+                <div class="card-header">
+                    <h2><i class="fa-solid fa-file-invoice-dollar"></i> Applicant & Loan Details</h2>
+                    <p>Enter applicant financial and asset information for real-time AI underwriting evaluation.</p>
+                </div>
+
+                <form id="loan-form" onsubmit="submitPrediction(event)">
+                    <!-- Section 1: Demographics & Employment -->
+                    <div class="form-section-title">
+                        <span>1</span> Personal & Employment Profile
+                    </div>
+                    <div class="form-row grid-3">
+                        <div class="form-group">
+                            <label for="no_of_dependents"><i class="fa-solid fa-users"></i> Dependents</label>
+                            <input type="number" id="no_of_dependents" name="no_of_dependents" min="0" max="10" value="2" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="education"><i class="fa-solid fa-graduation-cap"></i> Education</label>
+                            <select id="education" name="education" required>
+                                <option value="Graduate" selected>Graduate</option>
+                                <option value="Not Graduate">Not Graduate</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="self_employed"><i class="fa-solid fa-briefcase"></i> Employment</label>
+                            <select id="self_employed" name="self_employed" required>
+                                <option value="No" selected>Salaried / Employed</option>
+                                <option value="Yes">Self Employed</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Section 2: Financials & Loan Request -->
+                    <div class="form-section-title">
+                        <span>2</span> Income & Loan Requirements
+                    </div>
+                    <div class="form-row grid-2">
+                        <div class="form-group">
+                            <label for="income_annum"><i class="fa-solid fa-wallet"></i> Annual Income (₹)</label>
+                            <div class="input-prefix-wrapper">
+                                <span class="prefix">₹</span>
+                                <input type="number" id="income_annum" name="income_annum" min="50000" step="10000" value="8500000" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="loan_amount"><i class="fa-solid fa-hand-holding-dollar"></i> Loan Amount (₹)</label>
+                            <div class="input-prefix-wrapper">
+                                <span class="prefix">₹</span>
+                                <input type="number" id="loan_amount" name="loan_amount" min="10000" step="10000" value="22000000" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row grid-2">
+                        <div class="form-group">
+                            <label for="loan_term"><i class="fa-solid fa-calendar-days"></i> Loan Term (Years)</label>
+                            <input type="number" id="loan_term" name="loan_term" min="1" max="30" value="10" required>
+                        </div>
+                        <div class="form-group">
+                            <div class="label-with-badge">
+                                <label for="cibil_score"><i class="fa-solid fa-gauge-high"></i> CIBIL Credit Score</label>
+                                <span class="score-badge badge-excellent" id="cibil-tier-badge">Excellent</span>
+                            </div>
+                            <input type="range" id="cibil_score" name="cibil_score" min="300" max="900" value="780" class="slider" oninput="updateCibilDisplay(this.value)">
+                            <div class="range-values">
+                                <span>300 (Poor)</span>
+                                <span id="cibil-display" class="highlight-val">780</span>
+                                <span>900 (Excellent)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Section 3: Asset Portfolio -->
+                    <div class="form-section-title">
+                        <span>3</span> Asset Portfolio Valuation
+                    </div>
+                    <div class="form-row grid-2">
+                        <div class="form-group">
+                            <label for="residential_assets_value"><i class="fa-solid fa-house"></i> Residential Assets (₹)</label>
+                            <div class="input-prefix-wrapper">
+                                <span class="prefix">₹</span>
+                                <input type="number" id="residential_assets_value" name="residential_assets_value" min="0" step="10000" value="12000000" oninput="recalcAssets()" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="commercial_assets_value"><i class="fa-solid fa-building"></i> Commercial Assets (₹)</label>
+                            <div class="input-prefix-wrapper">
+                                <span class="prefix">₹</span>
+                                <input type="number" id="commercial_assets_value" name="commercial_assets_value" min="0" step="10000" value="4500000" oninput="recalcAssets()" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row grid-2">
+                        <div class="form-group">
+                            <label for="luxury_assets_value"><i class="fa-solid fa-gem"></i> Luxury Assets (₹)</label>
+                            <div class="input-prefix-wrapper">
+                                <span class="prefix">₹</span>
+                                <input type="number" id="luxury_assets_value" name="luxury_assets_value" min="0" step="10000" value="18000000" oninput="recalcAssets()" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="bank_asset_value"><i class="fa-solid fa-piggy-bank"></i> Bank Balance & Deposits (₹)</label>
+                            <div class="input-prefix-wrapper">
+                                <span class="prefix">₹</span>
+                                <input type="number" id="bank_asset_value" name="bank_asset_value" min="0" step="10000" value="6500000" oninput="recalcAssets()" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Asset Summary Banner -->
+                    <div class="assets-total-banner">
+                        <div class="total-item">
+                            <span class="total-label">Total Collateral / Assets</span>
+                            <span class="total-amount" id="total-assets-display">₹41,000,000</span>
+                        </div>
+                        <div class="total-item">
+                            <span class="total-label">Loan to Asset Ratio</span>
+                            <span class="total-amount" id="loan-to-asset-display">53.6%</span>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-primary btn-submit" id="btn-submit">
+                        <span class="btn-text"><i class="fa-solid fa-wand-magic-sparkles"></i> Run AI Loan Assessment</span>
+                        <div class="btn-loader" style="display: none;"><i class="fa-solid fa-spinner fa-spin"></i> Processing Model...</div>
+                    </button>
+                </form>
+            </div>
+
+            <!-- Right Side: Real-time Evaluation Card -->
+            <div class="results-column">
+                <div class="card result-card" id="result-container">
+                    <div class="card-header">
+                        <h2><i class="fa-solid fa-chart-pie"></i> Underwriting Decision</h2>
+                        <span class="badge-live">Live ML Output</span>
+                    </div>
+
+                    <div class="result-body">
+                        <!-- Decision Banner -->
+                        <div class="decision-box approved" id="decision-box">
+                            <div class="decision-icon" id="decision-icon">
+                                <i class="fa-solid fa-circle-check"></i>
+                            </div>
+                            <div class="decision-content">
+                                <span class="decision-sub">Prediction Result</span>
+                                <h3 id="decision-text">Loan Approved</h3>
+                                <p id="decision-summary">Applicant satisfies risk criteria and minimum credit threshold.</p>
+                            </div>
+                        </div>
+
+                        <!-- Confidence & Metrics -->
+                        <div class="metrics-card">
+                            <div class="metric-row">
+                                <div class="metric-info">
+                                    <span class="metric-title">Model Confidence Score</span>
+                                    <span class="metric-detail">RandomForest Ensemble Consensus</span>
+                                </div>
+                                <span class="metric-value" id="confidence-text">98.50%</span>
+                            </div>
+                            <div class="progress-bar-container">
+                                <div class="progress-fill fill-approved" id="confidence-bar" style="width: 98.5%;"></div>
+                            </div>
+                        </div>
+
+                        <!-- Detailed Financial Health Breakdown -->
+                        <div class="health-breakdown">
+                            <h4><i class="fa-solid fa-sliders"></i> Risk Factor Breakdown</h4>
+                            <div class="breakdown-grid">
+                                <div class="breakdown-card">
+                                    <span class="b-label">Credit Rating</span>
+                                    <span class="b-value text-success" id="b-credit">Excellent (780)</span>
+                                </div>
+                                <div class="breakdown-card">
+                                    <span class="b-label">Debt-to-Income</span>
+                                    <span class="b-value" id="b-dti">2.58x</span>
+                                </div>
+                                <div class="breakdown-card">
+                                    <span class="b-label">Asset Coverage</span>
+                                    <span class="b-value text-success" id="b-coverage">1.86x (Healthy)</span>
+                                </div>
+                                <div class="breakdown-card">
+                                    <span class="b-label">Term Duration</span>
+                                    <span class="b-value" id="b-term">10 Years</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Explainability Note -->
+                        <div class="info-callout" id="info-callout">
+                            <i class="fa-solid fa-circle-info"></i>
+                            <span id="callout-message">CIBIL score above 700 with sufficient asset collateral provides high confidence for approval.</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- API Developer Specs Card -->
+                <div class="card api-card" id="api-docs">
+                    <div class="card-header">
+                        <h2><i class="fa-solid fa-terminal"></i> REST API Endpoint</h2>
+                        <span class="badge-post">POST /predict</span>
+                    </div>
+                    <div class="api-body">
+                        <p class="api-desc">Integrate this pipeline directly into external microservices or mobile apps:</p>
+                        <div class="code-snippet-box">
+                            <pre><code id="curl-sample">curl -X POST http://127.0.0.1:5000/predict \
+  -H "Content-Type: application/json" \
+  -d '{
+    "no_of_dependents": 2,
+    "education": "Graduate",
+    "self_employed": "No",
+    "income_annum": 8500000,
+    "loan_amount": 22000000,
+    "loan_term": 10,
+    "cibil_score": 780,
+    "residential_assets_value": 12000000,
+    "commercial_assets_value": 4500000,
+    "luxury_assets_value": 18000000,
+    "bank_asset_value": 6500000
+  }'</code></pre>
+                            <button class="btn-copy" onclick="copyCurl()"><i class="fa-solid fa-copy"></i> Copy</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="app-footer">
+        <div class="footer-container">
+            <p>LoanPulse AI &copy; 2026 &bull; MLOps Loan Underwriting Prediction Service</p>
+            <div class="footer-links">
+                <a href="/health" target="_blank"><i class="fa-solid fa-heart-pulse"></i> /health</a>
+                <a href="/predict" target="_blank"><i class="fa-solid fa-network-wired"></i> /predict</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
