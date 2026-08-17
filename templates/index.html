@@ -34,9 +34,8 @@
             <div class="header-actions">
                 <div class="status-indicator">
                     <span class="pulse-dot"></span>
-                    <span class="status-text" id="api-status">API Online</span>
+                    <span class="status-text" id="api-status">System Online</span>
                 </div>
-                <a href="#api-docs" class="btn-secondary btn-sm"><i class="fa-solid fa-code"></i> API Specs</a>
             </div>
         </div>
     </header>
@@ -254,35 +253,6 @@
                         <div class="info-callout" id="info-callout">
                             <i class="fa-solid fa-circle-info"></i>
                             <span id="callout-message">CIBIL score above 700 with sufficient asset collateral provides high confidence for approval.</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- API Developer Specs Card -->
-                <div class="card api-card" id="api-docs">
-                    <div class="card-header">
-                        <h2><i class="fa-solid fa-terminal"></i> REST API Endpoint</h2>
-                        <span class="badge-post">POST /predict</span>
-                    </div>
-                    <div class="api-body">
-                        <p class="api-desc">Integrate this pipeline directly into external microservices or mobile apps:</p>
-                        <div class="code-snippet-box">
-                            <pre><code id="curl-sample">curl -X POST http://127.0.0.1:5000/predict \
-  -H "Content-Type: application/json" \
-  -d '{
-    "no_of_dependents": 2,
-    "education": "Graduate",
-    "self_employed": "No",
-    "income_annum": 8500000,
-    "loan_amount": 22000000,
-    "loan_term": 10,
-    "cibil_score": 780,
-    "residential_assets_value": 12000000,
-    "commercial_assets_value": 4500000,
-    "luxury_assets_value": 18000000,
-    "bank_asset_value": 6500000
-  }'</code></pre>
-                            <button class="btn-copy" onclick="copyCurl()"><i class="fa-solid fa-copy"></i> Copy</button>
                         </div>
                     </div>
                 </div>
