@@ -29,7 +29,10 @@ An end-to-end Machine Learning pipeline and intelligent web underwriting applica
 ## 🌟 Overview & Features
 
 - **Machine Learning Underwriting**: Trained on comprehensive financial and asset data with a `RandomForestClassifier` pipeline achieved via `StandardScaler` normalization.
-- **Real-Time Interactive Dashboard**: Modern dark-mode UI with live CIBIL score tier updates, collateral calculations, and instant underwriting decisions.
+- **SVG Speedometer Risk Gauge**: Interactive semi-circular gauge displaying live approval confidence with dynamic needle rotation and color gradient tracks.
+- **EMI & Risk-Based Pricing Engine**: Computes monthly EMI, risk-adjusted interest rates (APR), total interest, and total repayment amounts based on borrower credit score.
+- **Real-Time Live Debounced Evaluation**: Dragging range sliders or modifying numeric inputs updates predictions and EMI figures live (350ms debounce).
+- **One-Click PDF Credit Appraisal Exporter**: Download official Credit Appraisal & Risk Summary PDF reports using `html2pdf.js`.
 - **Quick Risk Scenarios**: Pre-configured scenario presets (*Prime Borrower*, *Moderate Risk*, *High Risk*) for instant testing.
 - **Risk Breakdown & Confidence Scoring**: Outputs prediction confidence percentage along with Debt-to-Income (DTI) and Asset Coverage metrics.
 - **Automated Unit Testing**: Complete test coverage via `pytest` for routes, edge cases, and prediction accuracy.

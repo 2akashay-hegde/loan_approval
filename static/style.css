@@ -880,3 +880,166 @@ input[type="number"]:focus, select:focus {
 .footer-links a:hover {
     color: var(--primary);
 }
+
+/* PDF Export Button */
+.btn-pdf-export {
+    background: rgba(239, 68, 68, 0.12);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    color: #FCA5A5;
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 0.4rem 0.85rem;
+    border-radius: var(--radius-full);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-pdf-export:hover {
+    background: rgba(239, 68, 68, 0.25);
+    border-color: rgba(239, 68, 68, 0.5);
+    color: #fff;
+    transform: translateY(-1px);
+}
+
+/* Speedometer Risk Gauge Widget */
+.speedometer-card {
+    background: rgba(13, 19, 33, 0.6);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 1.25rem 1rem 0.75rem;
+    margin-bottom: 1.25rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.speedometer-wrapper {
+    position: relative;
+    width: 220px;
+    margin: 0 auto;
+}
+
+.gauge-svg {
+    width: 100%;
+    height: auto;
+    display: block;
+    overflow: visible;
+}
+
+.gauge-center-text {
+    position: absolute;
+    bottom: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.gauge-percentage {
+    font-size: 1.75rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    background: linear-gradient(135deg, #F9FAFB, #D1D5DB);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    line-height: 1;
+}
+
+.gauge-sublabel {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-top: 4px;
+}
+
+/* EMI & Loan Pricing Widget */
+.emi-pricing-card {
+    background: rgba(13, 19, 33, 0.6);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 1.1rem 1.25rem;
+    margin-bottom: 1.25rem;
+}
+
+.emi-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.85rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    padding-bottom: 0.5rem;
+}
+
+.emi-card-header h4 {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--text-main);
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+}
+
+.badge-rate {
+    font-size: 0.72rem;
+    font-weight: 700;
+    background: rgba(99, 102, 241, 0.15);
+    color: #818CF8;
+    border: 1px solid rgba(99, 102, 241, 0.3);
+    padding: 0.2rem 0.55rem;
+    border-radius: var(--radius-full);
+}
+
+.emi-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+}
+
+.emi-metric {
+    display: flex;
+    flex-direction: column;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    padding: 0.65rem 0.75rem;
+    border-radius: var(--radius-sm);
+}
+
+.emi-label {
+    font-size: 0.68rem;
+    color: var(--text-muted);
+    font-weight: 500;
+    margin-bottom: 0.2rem;
+}
+
+.emi-value {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--text-main);
+}
+
+.text-primary {
+    color: var(--primary) !important;
+}
+
+/* Print Rules for PDF */
+@media print {
+    body {
+        background: #0B0F19 !important;
+        color: #F9FAFB !important;
+    }
+    .app-header, .presets-section, .form-card, .app-footer, .btn-pdf-export {
+        display: none !important;
+    }
+    .main-container {
+        padding: 0 !important;
+        max-width: 100% !important;
+    }
+    .results-column, .result-card {
+        width: 100% !important;
+        box-shadow: none !important;
+    }
+}
